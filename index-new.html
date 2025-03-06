@@ -346,6 +346,9 @@
       <div class="checkbox-control">
         <input type="checkbox" id="coverCheckbox">
         <label for="coverCheckbox">Cover</label>
+
+        <input type="checkbox" id="centerCheckbox">
+        <label for="centerCheckbox">Center</label>
       </div>
       <div class="control-group">
         <label for="columnsSlider">Columns:</label>
@@ -557,6 +560,8 @@
     const borderWidthValue = document.getElementById('borderWidthValue');
     const borderColor = document.getElementById('borderColor');
     const coverCheckbox = document.getElementById('coverCheckbox');
+    const centerCheckbox = document.getElementById('centerCheckbox');
+
     
     // Handle the fit height checkbox
     fitHeight.addEventListener('change', function() {
@@ -576,6 +581,16 @@
         masonryGrid.classList.add('flex-column');
       } else {
         masonryGrid.classList.remove('flex-column');
+      }
+    });
+
+    centerCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        masonryGrid.style.justifyContent = 'center';
+        // masonryGrid.classList.add('justify-content-center');
+      } else {
+        masonryGrid.style.justifyContent = 'initial';
+        // masonryGrid.classList.remove('justify-content-center');
       }
     });
     
