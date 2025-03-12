@@ -268,8 +268,8 @@
   <div class="control-panel">
     <label for="width-input">Width:</label>
     <input type="number" id="width-input" placeholder="Width (px)" min="100" max="2000" value="660">
-    <label for="height-input">Height:</label>
-    <input type="number" id="height-input" placeholder="Height (px)" min="100" max="2000">
+    <!-- <label for="height-input">Height:</label> -->
+    <!-- <input type="number" id="height-input" placeholder="Height (px)" min="100" max="2000"> -->
     <div class="control-group">
       <label for="imageName">Name</label>
       <input type="text" id="imageName">
@@ -279,7 +279,7 @@
     <div style="display: flex; justify-content: start; gap: 10px; align-items: center;">
       <button class="download-btn" id="captureBtn">Download layout</button>
       <button class="download-btn" id="download-btn">Download solid</button>
-      <a class="download-btn" href="/index.html" id="download-btn">
+      <a class="download-btn" href="index.html" id="download-btn">
         <small>
           One | Two Images
         </small>
@@ -552,7 +552,7 @@
 
     // Control Panel Logic
     const widthInput = document.getElementById('width-input');
-    const heightInput = document.getElementById('height-input');
+   // const heightInput = document.getElementById('height-input');
     // const applySizeButton = document.getElementById('apply-size');
 
     widthInput.addEventListener('keyup', () => {
@@ -562,12 +562,12 @@
       wrapper.style.width = width;
     });
 
-    heightInput.addEventListener('keyup', () => {
+    // heightInput.addEventListener('keyup', () => {
 
-      const height = heightInput.value ? `${heightInput.value}px` : 'auto';
+    //   const height = heightInput.value ? `${heightInput.value}px` : 'auto';
 
-      wrapper.style.height = height;
-    });
+    //   wrapper.style.height = height;
+    // });
 
 
 
