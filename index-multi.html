@@ -6,6 +6,7 @@
   <title>Masonry with Drag-and-Drop Reordering</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+  <link rel="manifest" href="manifest.json">
   <style>
     /* Your existing styles */
     * {
@@ -313,7 +314,19 @@
   <button class="btn btn-upload" id="uploadBtn">+</button>
   <input type="file" id="uploadImages" accept="image/*" multiple style="display: none;">
 
-
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then((registration) => {
+            console.log('Service Worker registered with scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
   <script>
     // Get references to the drop zone and the masonry container
     const dropZone = document.getElementById('drop-zone');
