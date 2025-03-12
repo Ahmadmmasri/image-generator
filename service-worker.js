@@ -2,6 +2,7 @@ const CACHE_NAME = 'site-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/index-multi.html',
   '/html2canvas.min.js',
 ];
 
