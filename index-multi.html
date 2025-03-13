@@ -165,6 +165,33 @@
       background-color: rgba(255, 255, 255, 1);
     }
 
+    /* Height control styles */
+    .height-control {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      background: rgba(255, 255, 255, 0.7);
+      border: none;
+      padding: 3px;
+      font-size: 12px;
+      display: none;
+      align-items: center;
+      z-index: 5;
+      border-radius: 3px;
+    }
+
+    .height-control:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .height-control input {
+      width: 50px;
+      margin-left: 5px;
+      padding: 2px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
     /* Dragging state */
     .dragging {
       opacity: 0.5;
@@ -269,17 +296,14 @@
   <div class="control-panel">
     <label for="width-input">Width:</label>
     <input type="number" id="width-input" placeholder="Width (px)" min="100" max="2000" value="660">
-    <!-- <label for="height-input">Height:</label> -->
-    <!-- <input type="number" id="height-input" placeholder="Height (px)" min="100" max="2000"> -->
     <div class="control-group">
       <label for="imageName">Name</label>
       <input type="text" id="imageName">
     </div>
-    <!-- <button id="apply-size">Apply</button> -->
     <button class="btn" id="previewBtn">Preview</button>
     <div style="display: flex; justify-content: start; gap: 10px; align-items: center;">
       <button class="download-btn" id="captureBtn">Download layout</button>
-      <button class="download-btn" id="download-btn">Download solid</button>
+      <!-- <button class="download-btn" id="download-btn">Download solid</button> -->
       <a class="download-btn" href="index.html" id="download-btn">
         <small>
           One | Two Images
@@ -337,7 +361,6 @@
     const popupContent= document.getElementById('popupContent');
     const dismissBtn = document.getElementById('dismissBtn');
     const uploadBtn = document.getElementById('uploadBtn');
-
     
     previewBtn.addEventListener('click', async () => {
       const popupContent = document.getElementById('popupContent');
@@ -350,12 +373,13 @@
 
       // Open the preview popup
       previewPopup.style.display = 'flex'; 
+      const heightInputsImage = document.querySelectorAll('.height-control');
+      heightInputsImage.forEach(input => input.style.display = 'none');
 
       // Add a small delay to ensure the DOM is fully rendered
       setTimeout(() => {
         // Use domtoimage to capture the image of the masonry container
         const masonryElement = document.querySelector('#masonry-container');
-        
         domtoimage.toPng(masonryElement, {
           quality: 1,
           bgcolor: "#ffffff", // Use white background instead of transparent
@@ -429,6 +453,36 @@
       }
     }
 
+    // Function to add height control to a figure element
+    function addHeightControl(figureElement) {
+      const heightControl = document.createElement('div');
+      heightControl.classList.add('height-control');
+      
+      const label = document.createElement('label');
+      label.textContent = 'H:';
+      
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.min = 50;
+      input.max = 1000;
+      input.value = figureElement.offsetHeight;
+      
+      input.addEventListener('change', (e) => {
+        e.stopPropagation(); // Prevent dragging when interacting with the control
+        figureElement.style.height = `${input.value}px`;
+      });
+      
+      input.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent dragging when clicking the input
+      });
+      
+      heightControl.appendChild(label);
+      heightControl.appendChild(input);
+      figureElement.appendChild(heightControl);
+      
+      return input; // Return the input for later reference
+    }
+
     // Function to add object-fit toggle button
     function addObjectFitButton(figureElement) {
       const toggleButton = document.createElement('button');
@@ -455,10 +509,11 @@
       figureElement.appendChild(deleteButton);
     }
 
-    // Add delete buttons to pre-existing images
+    // Add buttons and controls to pre-existing images
     document.querySelectorAll('.masonry-brick').forEach(brick => {
       addDeleteButton(brick);
       addObjectFitButton(brick);
+      addHeightControl(brick);
     });
 
     // Allow drop action
@@ -475,7 +530,6 @@
       event.preventDefault();
       dropZone.classList.remove('dragover');
       
-
       const files = event.dataTransfer.files;
       if (files.length > 0) {
         // Loop through all dropped files
@@ -489,11 +543,18 @@
               
               const figureElement = document.createElement('figure');
               figureElement.classList.add('masonry-brick', 'masonry-brick--h');
+              figureElement.addEventListener('dblclick', handleDoubleClick);
+              
+              // Set the default height
+              figureElement.style.height = `250px`;
+              
               figureElement.appendChild(imgElement);
 
-              // Add the delete button and object-fit button to the dynamically added image
+              // Add controls to the dynamically added image
               addDeleteButton(figureElement);
               addObjectFitButton(figureElement);
+              const heightInput = addHeightControl(figureElement);
+              heightInput.value = 250;
               
               masonryContainer.appendChild(figureElement);
 
@@ -513,8 +574,11 @@
     let draggedItem = null;
 
     function handleDragStart(e) {
-      // Don't start drag if clicking on a button
-      if (e.target.classList.contains('object-fit-btn') || e.target.classList.contains('delete-btn')) {
+      // Don't start drag if clicking on a control
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || 
+          e.target.classList.contains('height-control') || 
+          e.target.classList.contains('object-fit-btn') || 
+          e.target.classList.contains('delete-btn')) {
         e.preventDefault();
         return false;
       }
@@ -565,24 +629,11 @@
 
     // Control Panel Logic
     const widthInput = document.getElementById('width-input');
-   // const heightInput = document.getElementById('height-input');
-    // const applySizeButton = document.getElementById('apply-size');
 
     widthInput.addEventListener('keyup', () => {
-
       const width = widthInput.value ? `${widthInput.value}px` : 'auto';
-
       wrapper.style.width = width;
     });
-
-    // heightInput.addEventListener('keyup', () => {
-
-    //   const height = heightInput.value ? `${heightInput.value}px` : 'auto';
-
-    //   wrapper.style.height = height;
-    // });
-
-
 
     document.getElementById('download-btn').addEventListener('click', function() {
       const masonryElement = document.querySelector('.wrapper');
@@ -593,7 +644,7 @@
       }
 
       // Hide all control buttons temporarily
-      const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn');
+      const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn, .height-control');
       controlButtons.forEach(button => button.style.display = 'none');
       
       html2canvas(masonryElement, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
@@ -603,7 +654,7 @@
         link.click();
         
         // Show buttons again
-        controlButtons.forEach(button => button.style.display = 'block');
+        controlButtons.forEach(button => button.style.display = '');
       });
     });
 
@@ -616,7 +667,7 @@
       }
       
       // Hide all control buttons temporarily
-      const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn');
+      const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn, .height-control');
       controlButtons.forEach(btn => btn.style.display = 'none');
       
       // Use dom-to-image to capture the element
@@ -632,13 +683,13 @@
         link.click();
         
         // Show buttons again
-        controlButtons.forEach(btn => btn.style.display = 'block');
+        controlButtons.forEach(btn => btn.style.display = '');
       })
       .catch(function(error) {
         console.error('Error generating image:', error);
         alert('There was an error generating the image. See console for details.');
         
-        controlButtons.forEach(btn => btn.style.display = 'block');
+        controlButtons.forEach(btn => btn.style.display = '');
       });
     });
   
@@ -659,17 +710,24 @@
               
               const figureElement = document.createElement('figure');
               figureElement.classList.add('masonry-brick', 'masonry-brick--h');
+              figureElement.addEventListener('dblclick', handleDoubleClick);
               figureElement.draggable = true;
+              
+              // Set the default height
+              figureElement.style.height = `250px`;
+              
               figureElement.appendChild(imgElement);
 
-              // Add the delete button and object-fit button to the dynamically added image
+              // Add controls to the dynamically added image
               addDeleteButton(figureElement);
               addObjectFitButton(figureElement);
+              const heightInput = addHeightControl(figureElement);
+              heightInput.value = 250;
               
               masonryContainer.appendChild(figureElement);
 
               // Enable drag-and-drop for the new image
-              enableDragAndDrop(figureElement);  // <-- This line ensures that the drag and drop functionality is applied to the new image
+              enableDragAndDrop(figureElement);
             };
             reader.readAsDataURL(file);
             wrapper.style.width = widthInput.value ? `${widthInput.value}px` : 'auto';
@@ -683,6 +741,26 @@
     document.getElementById('resetBtn').addEventListener('click', function() {
       masonryContainer.innerHTML = '';
     });
+    
+
+    // Add double-click event listener to show height input
+    document.querySelectorAll('.masonry-brick').forEach(brick => {
+      brick.addEventListener('dblclick', (e) => {
+        const heightInput = brick.querySelector('.height-control input');
+        if (heightInput) {
+          heightInput.style.display = 'block';
+          heightInput.focus();
+        }
+      });
+    });
+
+    function handleDoubleClick(e) {
+      const heightInput = this.querySelector('.height-control');
+      if (heightInput) {
+        heightInput.style.setProperty('display', 'flex'); // Proper way to apply styles
+        heightInput.querySelector('input').focus();
+      }
+    }
   </script>
 </body>
 </html>
