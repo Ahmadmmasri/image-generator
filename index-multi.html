@@ -303,7 +303,7 @@
     <button class="btn" id="previewBtn">Preview</button>
     <div style="display: flex; justify-content: start; gap: 10px; align-items: center;">
       <button class="download-btn" id="captureBtn">Download layout</button>
-      <!-- <button class="download-btn" id="download-btn">Download solid</button> -->
+      <button class="download-btn" id="download-btn">Download solid</button>
       <a class="download-btn" href="index.html">
         <small>
           One | Two Images
@@ -635,28 +635,28 @@
       wrapper.style.width = width;
     });
 
-    document.getElementById('captureBtn').addEventListener('click', function() {
-      const masonryElement = document.querySelector('.wrapper');
+    // document.getElementById('download-btn').addEventListener('click', function() {
+    //   const masonryElement = document.querySelector('.wrapper');
 
-      if (document.getElementById("imageName").value === '') {
-        alert('Please add image name before downloading.');
-        return;
-      }
+    //   if (document.getElementById("imageName").value === '') {
+    //     alert('Please add image name before downloading.');
+    //     return;
+    //   }
 
-      // Hide all control buttons temporarily
-      const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn, .height-control');
-      controlButtons.forEach(button => button.style.display = 'none');
+    //   // Hide all control buttons temporarily
+    //   const controlButtons = masonryElement.querySelectorAll('.delete-btn, .object-fit-btn, .height-control');
+    //   controlButtons.forEach(button => button.style.display = 'none');
       
-      html2canvas(masonryElement, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = document.getElementById("imageName").value + '.png';
-        link.click();
+    //   html2canvas(masonryElement, { backgroundColor: null, scale: 2, useCORS: true }).then(canvas => {
+    //     const link = document.createElement('a');
+    //     link.href = canvas.toDataURL('image/png');
+    //     link.download = document.getElementById("imageName").value + '.png';
+    //     link.click();
         
-        // Show buttons again
-        controlButtons.forEach(button => button.style.display = '');
-      });
-    });
+    //     // Show buttons again
+    //     controlButtons.forEach(button => button.style.display = '');
+    //   });
+    // });
 
     document.getElementById('captureBtn').addEventListener('click', function() {
       const masonryElement = document.querySelector('#masonry-container');
