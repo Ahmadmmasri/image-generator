@@ -330,7 +330,7 @@
   <div id="previewPopup">
     <div id="popupContent">
       <button class="dismiss-btn" id="dismissBtn">X</button>
-      <img id="popupImage" src="preview.jpeg" alt="Image Preview">
+      <img id="popupImage" src="preview.jpg" alt="Image Preview">
     </div>
   </div>
 
@@ -397,11 +397,11 @@
           previewSampleContainer.style.position = 'absolute';
           previewSampleContainer.style.top = '60px';
           previewSampleContainer.style.right = '15px';
-          previewSampleContainer.style.width = "auto";
-          previewSampleContainer.style.maxWidth = "90%"; 
+          previewSampleContainer.style.display = 'flex';
+          previewSampleContainer.style.justifyContent = 'start';
+          previewSampleContainer.style.width = "65%";
           previewSampleContainer.style.height = "auto";
-          previewSampleContainer.style.maxHeight = "80vh"; 
-
+          
           // Dynamically create an img element to hold the preview image
           const previewSample = new Image();
           previewSample.id = 'popupImageSample';
