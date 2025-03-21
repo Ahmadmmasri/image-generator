@@ -2,7 +2,7 @@ const CACHE_NAME = 'site-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/preview.jpeg',
+  '/preview.jpg',
   '/index-multi.html',
   '/html2canvas.min.js',
 ];
