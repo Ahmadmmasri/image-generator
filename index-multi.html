@@ -367,7 +367,7 @@
       // Remove any existing preview image
       const existingImage = popupContent.querySelector('#popupImageSample');
       if (existingImage) {
-        existingImage.remove();
+        existingImage.parentElement.remove();
       }
 
       // Open the preview popup
@@ -395,16 +395,16 @@
           previewSampleContainer.id = 'popupImageSampleContainer';
           previewSampleContainer.style.position = 'absolute';
           previewSampleContainer.style.top = '15%';
-          previewSampleContainer.style.right = '15px';
+          previewSampleContainer.style.right = '30px';
           previewSampleContainer.style.display = 'flex';
-          previewSampleContainer.style.justifyContent = 'start';
-          previewSampleContainer.style.width = "65%";
+          previewSampleContainer.style.justifyContent = 'end';
+          previewSampleContainer.style.width = "61%";
           previewSampleContainer.style.height = "66%";
           
           // Dynamically create an img element to hold the preview image
           const previewSample = new Image();
           previewSample.id = 'popupImageSample';
-          previewSample.style.width = "390px";
+          previewSample.style.width = "auto";
           // previewSample.style.height = "390px"; 
           previewSample.style.maxHeight = "66vh"; 
           previewSample.src = dataUrl;
